@@ -1,25 +1,27 @@
-import type { Message, Guild } from "./deps.ts";
+import type { Message, Guild } from './deps.ts'
 import type {
   Command,
   Argument,
   PermissionLevels,
-} from "./src/types/commands.ts";
-import type { Monitor } from "./src/types/monitors.ts";
-import type { Task } from "./src/types/tasks.ts";
-import type { CustomEvents } from "./src/types/events.ts";
+} from './src/types/commands.ts'
+import type { Monitor } from './src/types/monitors.ts'
+import type { Task } from './src/types/tasks.ts'
+import type { CustomEvents } from './src/types/events.ts'
 import type {
   MessageCollector,
   ReactionCollector,
-} from "./src/types/collectors.ts";
+} from './src/types/collectors.ts'
 
-import StartBot, { Collection, Intents } from "./deps.ts";
-import { configs } from "./configs.ts";
-import { importDirectory } from "./src/utils/helpers.ts";
-import { loadLanguages } from "./src/utils/i18next.ts";
+import StartBot, { Collection, Intents } from './deps.ts'
+import { configs } from './configs.ts'
+import { importDirectory } from './src/utils/helpers.ts'
+import { loadLanguages } from './src/utils/i18next.ts'
 
 console.info(
-  "Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...",
-);
+  'Beginning Bot Startup Process. This can take a little bit depending on your system. Loading now...',
+)
+
+export const upSince = Date.now()
 
 export const botCache = {
   arguments: new Collection<string, Argument>(),
@@ -40,33 +42,31 @@ export const botCache = {
   >(),
   tasks: new Collection<string, Task>(),
   memberLastActive: new Collection<string, number>(),
-};
+}
 
 // Always require these files be processed before anything else
-await Promise.all([
-  "./src/customizations/structures",
-].map(
-  (path) => importDirectory(Deno.realPathSync(path)),
-));
+await Promise.all(
+  ['./src/customizations/structures'].map((path) =>
+    importDirectory(Deno.realPathSync(path)),
+  ),
+)
 
 // Forces deno to read all the files which will fill the commands/inhibitors cache etc.
 await Promise.all(
   [
-    "./src/commands",
-    "./src/inhibitors",
-    "./src/events",
-    "./src/arguments",
-    "./src/monitors",
-    "./src/tasks",
-    "./src/permissionLevels",
-    "./src/events",
-  ].map(
-    (path) => importDirectory(Deno.realPathSync(path)),
-  ),
-);
+    './src/commands',
+    './src/inhibitors',
+    './src/events',
+    './src/arguments',
+    './src/monitors',
+    './src/tasks',
+    './src/permissionLevels',
+    './src/events',
+  ].map((path) => importDirectory(Deno.realPathSync(path))),
+)
 
 // Loads languages
-await loadLanguages();
+await loadLanguages()
 
 StartBot({
   token: configs.token,
@@ -74,4 +74,4 @@ StartBot({
   intents: [Intents.GUILDS, Intents.GUILD_MESSAGES],
   // These are all your event handler functions. Imported from the events folder
   eventHandlers: botCache.eventHandlers,
-});
+})

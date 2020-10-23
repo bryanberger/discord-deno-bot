@@ -13,6 +13,7 @@ botCache.inhibitors.set("cooldown", async function (message, command) {
 
   const key = `${message.author.id}-${command.name}`;
   const cooldown = membersInCooldown.get(key);
+
   if (cooldown) {
     if (cooldown.used + 1 >= (command.cooldown.allowedUses || 1)) {
       const now = Date.now();

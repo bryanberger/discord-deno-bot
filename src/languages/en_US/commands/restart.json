@@ -1,0 +1,3 @@
+{
+  "DESCRIPTION": "Forces the process to exit, thus reconnecting (docker restart-policy)."
+}
